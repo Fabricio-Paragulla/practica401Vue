@@ -2,8 +2,13 @@
 import JuegoCartas from '../src/components/JuegoCartas.vue';
 import SalaCine from '../src/components/SalaCine.vue';
 import GestorHorarios from '../src/components/GestorHorarios.vue';
+import PanelDeControl from '../src/components/PanelDeControl.vue';
+import ContenidoPrincipal from '../src/components/ContenidoPrincipal.vue';
+import NotificationComposer from './components/NotificationComposer.vue';
 import { ref } from 'vue';
 const vistaActual = ref<'cartas' | 'cine' | 'horarios'>('cine');
+// Estado para controlar qué ejercicio se ve
+const currentTab = ref<'ej1' | 'ej2'>('ej1');
 </script>
 
 <template>
@@ -43,7 +48,46 @@ const vistaActual = ref<'cartas' | 'cine' | 'horarios'>('cine');
     <div class="aviso-consola">
         Revisa la consola (F12) para ver el log de eventos del juego de cartas o la sala de cine.
     </div>
-  </div>
+    </div>
+    <div class="main-wrapper">
+
+        <nav class="top-nav">
+        <button
+            :class="{ active: currentTab === 'ej1' }"
+            @click="currentTab = 'ej1'"
+        >
+            Ejercicio 4.1: Singleton
+        </button>
+        <button
+            :class="{ active: currentTab === 'ej2' }"
+            @click="currentTab = 'ej2'"
+        >
+            Ejercicio 4.2: Factory
+        </button>
+        </nav>
+
+        <div v-if="currentTab === 'ej1'" class="exercise-container">
+        <header class="exercise-header">
+            <h1>Configuración Global (Singleton)</h1>
+            <p>Cambia el tema o el idioma y verás cómo afecta a toda la app.</p>
+        </header>
+
+        <div class="singleton-layout">
+            <aside class="sidebar"><PanelDeControl /></aside>
+            <main class="content"><ContenidoPrincipal /></main>
+        </div>
+        </div>
+
+        <div v-if="currentTab === 'ej2'" class="exercise-container">
+        <header class="exercise-header">
+            <h1>Sistema de Notificaciones (Factory)</h1>
+            <p>Selecciona un tipo y envía. La factoría creará el objeto correcto.</p>
+        </header>
+
+        <NotificationComposer />
+        </div>
+
+    </div>
 </template>
 
 <style>
@@ -118,4 +162,66 @@ body { margin: 0; }
     text-align: center;
     z-index: 1000;
 }
+
+/* Estilos generales para el layout de la práctica */
+body { 
+    margin: 0; 
+    font-family: 'Inter', sans-serif; 
+    background-color: #f0f2f5; 
+    color: #333; 
+}
+
+.main-wrapper { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px; 
+}
+
+/* Navegación tipo pestañas */
+.top-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+.top-nav button {
+    padding: 10px 20px; 
+    border: none; 
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    border-radius: 6px;
+}
+.top-nav button:hover { 
+    background: #e0e0e0; 
+}
+.top-nav button.active { 
+    background: #0066ff;
+    color: white; 
+}
+
+/* Layout específico del Singleton (Eje 1) */
+.singleton-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* Header de cada ejercicio */
+.exercise-header { 
+    margin-bottom: 20px; 
+}
+.exercise-header h1 { 
+    margin: 0;
+    font-size: 1.5rem; 
+}
+.exercise-header p {
+    margin: 5px 0 0 0;
+    color: #666; 
+}
+
 </style>
